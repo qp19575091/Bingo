@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
-
-
     public function create(RoomRequest $request)
     {
         $room = [
@@ -29,7 +27,6 @@ class RoomController extends Controller
 
     public function show(Request $request)
     {
-        // return session()->get("room");
         return session()->get("room.{$request->roomId}");
     }
 
