@@ -17,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::apiResource('/room', App\Http\Controllers\Api\RoomController::class);
+Route::post('/room', [App\Http\Controllers\Api\RoomController::class, 'create']);
+Route::get('/room', [App\Http\Controllers\Api\RoomController::class, 'show']);
