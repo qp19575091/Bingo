@@ -13,9 +13,6 @@ class RoomController extends Controller
 
     public function create(RoomRequest $request)
     {
-        // session()->flush();
-        // return;
-        // return session()->get('room');
         $room = [
             "roomId" => $request->roomId,
             "users" => [
@@ -24,28 +21,21 @@ class RoomController extends Controller
         ];
 
         if (session()->has("room.{$request->roomId}")) {
-
             session()->push("room.{$request->roomId}.users", $request->nickname);
         } else {
-
             session()->put("room.{$request->roomId}", $room);
         }
-
-
-        return session()->get('room');
     }
 
     public function show(Request $request)
     {
-
+        return session()->get("room");
         return session()->get("room.{$request->roomId}");
     }
-}
 
-// {
-//     roomId: 123,
-//     users: [
-//         "a", 
-//         "ㄖ"
-//     ]
-// }
+    public function delete(Request $request)
+    {
+        session()->pull("room.{$request->roomId}");
+        return session()->get("room");
+    }
+}

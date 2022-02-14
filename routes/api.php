@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/room', [App\Http\Controllers\Api\RoomController::class, 'create']);
 Route::get('/room', [App\Http\Controllers\Api\RoomController::class, 'show']);
+Route::delete('/room', [App\Http\Controllers\Api\RoomController::class, 'delete']);
