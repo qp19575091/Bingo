@@ -29,7 +29,7 @@ class RoomController extends Controller
 
     public function show(Request $request)
     {
-        return session()->get("room");
+        // return session()->get("room");
         return session()->get("room.{$request->roomId}");
     }
 
