@@ -19,7 +19,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware(['users.number'])->group(function () {
-    Route::post('/room', [App\Http\Controllers\Api\RoomController::class, 'create']);
+    
 });
+Route::post('/room', [App\Http\Controllers\Api\RoomController::class, 'store']);
+Route::put('/room', [App\Http\Controllers\Api\RoomController::class, 'join']);
+
 Route::get('/room', [App\Http\Controllers\Api\RoomController::class, 'show']);
 Route::delete('/room', [App\Http\Controllers\Api\RoomController::class, 'delete']);
+
+Route::middleware(['users.order'])->group(function () {
+    // Route::get('/room/game', [App\Http\Controllers\Api\GameController::class, 'chooseNumber']);
+});
+Route::get('/room/game', [App\Http\Controllers\Api\GameController::class, 'chooseNumber']);
+Route::post('/room/game', [App\Http\Controllers\Api\GameController::class, 'store']);
+
+
+

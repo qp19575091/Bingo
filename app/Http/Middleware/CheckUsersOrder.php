@@ -6,10 +6,10 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckUsersNumber
+class CheckUsersOrder
 {
     /**
-     * The users number in room must less than 2 
+     * Check the users order.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
@@ -17,12 +17,10 @@ class CheckUsersNumber
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!session()->has("room.{$request->room_id}")) {
+        $room = session()->get("room.{$request->room_id}");
+        if ($room['user_order'] == array_search($request->nickname, $room['users'])) {
             return $next($request);
         }
-        if (count(session()->get("room.{$request->room_id}.users")) < 2) {
-            return $next($request);
-        }
-        abort(response::HTTP_ACCEPTED, "The room is full. Please choose another room");
+        abort(Response::HTTP_FORBIDDEN, "Please wait for other.");
     }
 }
