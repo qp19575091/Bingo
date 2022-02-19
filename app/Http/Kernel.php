@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'users.number' =>  \App\Http\Middleware\CheckUsersNumber::class,
         'users.order' =>  \App\Http\Middleware\CheckUsersOrder::class,
+        'users.room' =>  \App\Http\Middleware\CheckUserInRoom::class,
+        'room' =>  \App\Http\Middleware\CheckRoomExist::class,
     ];
 }

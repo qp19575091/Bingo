@@ -26,12 +26,12 @@ class RoomController extends Controller
      */
     public function store(RoomRequest $request)
     {
-        // session()->flush();
         $room = [
             "win_line" => $request->win_line,
             "size" => $request->size,
             "user_order" => 0,
             "room_id" => $request->room_id,
+
             "users" => [
                 $request->nickname => []
             ]
@@ -41,6 +41,8 @@ class RoomController extends Controller
             return "The room_id has exists";
         }
         session()->put("room.{$request->room_id}", $room);
+        session()->push("room.{$request->room_id}.user_id", $request->nickname);
+
 
         return response()->json([], Response::HTTP_CREATED);
     }
@@ -61,17 +63,11 @@ class RoomController extends Controller
      */
     public function join(Request $request)
     {
-        if (!session()->has("room.{$request->room_id}")) {
-            return "The room_id not exists";
-        }
-
-        if (array_key_exists($request->nickname, session()->get("room.{$request->room_id}.users"))) {
-            return "Please Choose Another Nickname";
-        }
-
+        session()->push("room.{$request->room_id}.user_id", $request->nickname);
         $users = session()->get("room.{$request->room_id}.users");
         $users +=  array($request->nickname => []);
         session()->put("room.{$request->room_id}.users", $users);
+
 
         return session()->get("room.{$request->room_id}.users");
     }
@@ -95,7 +91,11 @@ class RoomController extends Controller
      */
     public function show(Request $request)
     {
+        // return session()->put("room.{$request->room_id}.user_order", 0);
         $room = session()->get("room.{$request->room_id}");
+
+        // return $room['users']['a'];
+        // return array_keys($room['users'],"a");
 
         if (is_null($room)) {
             abort(Response::HTTP_NOT_FOUND, "This room_id is not fount.");

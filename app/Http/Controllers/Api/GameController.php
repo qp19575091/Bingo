@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Service\BingoService;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class GameController extends Controller
 {
@@ -31,13 +32,6 @@ class GameController extends Controller
      */
     public function store(Request $request, BingoService $bingo)
     {
-        // session()->flush();
-        $bingoArrs = [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9],
-        ];
-
         $room = session()->get("room.{$request->room_id}");
 
         for ($i = 0; $i < $room['size']; $i++) {
@@ -72,10 +66,12 @@ class GameController extends Controller
      */
     public function chooseNumber(Request $request, BingoService $bingo)
     {
-        // session()->flush();5
-        $bingoArrs = $bingo->getBingoArr();
+        $room = $bingo->getRoom();
+        if (($room['user_order'] != array_search($request->nickname, $room['user_id']))) {
+            abort(Response::HTTP_FORBIDDEN, "Please wait for other.");
+        }
 
-        // return $bingo->getUserNumber();
+        $bingoArrs = $bingo->getBingoArr();
 
         foreach ($bingoArrs as $k => $v) {
             if (in_array($request->number, $v)) {
@@ -89,10 +85,9 @@ class GameController extends Controller
         session()->put("room.{$request->room_id}.users.{$request->nickname}", $bingoArrs);
 
         if ($bingo->isBingo()) {
-            return "Game Over";
+            return "Game Over. User:" . $request->nickname . " Win.";
         }
 
         return session()->get("room")[$request->room_id];
-        return $bingoArrs;
     }
 }

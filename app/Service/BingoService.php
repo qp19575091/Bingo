@@ -43,7 +43,6 @@ class BingoService
         if ($line === $room['win_line']) {
             return true;
         }
-        return false;
     }
 
     public function next()

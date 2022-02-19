@@ -6,10 +6,10 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckUsersOrder
+class CheckUserInRoom
 {
     /**
-     * Check the users order.
+     * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
@@ -18,9 +18,9 @@ class CheckUsersOrder
     public function handle(Request $request, Closure $next)
     {
         $room = session()->get("room.{$request->room_id}");
-        if (($room['user_order'] == array_search($request->nickname, $room['user_id']))) {
+        if (in_array($request->nickname, $room['user_id'])) {
             return $next($request);
         }
-        abort(Response::HTTP_FORBIDDEN, "Please wait for other.");
+        abort(Response::HTTP_FORBIDDEN, "This user is not in room");
     }
 }
