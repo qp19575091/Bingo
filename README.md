@@ -1,6 +1,8 @@
 
 ----------
-This is a Bingo game.
+### This is a Bingo game played on the web.
+
+### Use `memery` not database to store data.
 
 Installation
 ----------
