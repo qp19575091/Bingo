@@ -26,7 +26,7 @@ Route::middleware(['room'])->group(function () {
     Route::put('/room', [App\Http\Controllers\Api\RoomController::class, 'join'])->middleware('users.number');
 
     Route::middleware(['users.room'])->group(function () {
-        Route::get('/room/game', [App\Http\Controllers\Api\GameController::class, 'chooseNumber']);
+        Route::put('/room/game', [App\Http\Controllers\Api\GameController::class, 'chooseNumber']);
         Route::post('/room/game', [App\Http\Controllers\Api\GameController::class, 'store']);
     });
 });
