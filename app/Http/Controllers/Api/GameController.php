@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\GameRequest;
 use App\Service\BingoService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,25 +16,25 @@ class GameController extends Controller
     /**
      * Store numeric values to fill bingoArr
      *
-     * @bodyParam room_id string required Need room_id to show the room information. emxample: "room1"
-     * @bodyParam nickname string required the text of the nickname. emxample: "Jacky"
-     * @bodyParam number integer required the number of the bingo. emxample: 3
+     * @bodyParam room_id string required Need room_id to show the room information. Example: "room1"
+     * @bodyParam nickname string required The text of the nickname. Example: "Jacky"
+     * @bodyParam number integer required The number of the bingo. Example: 3
      * 
      * @response 200 {
      *      "win_line": 1,
      *      "size": 3,
      *      "user_order": 0,
-     *      "room_id": "d",
+     *      "room_id": "user1",
      *      "user_number": 2,
      *      "users": {
-     *          "a": [
+     *          "user1": [
      *              [
      *                  1,
      *                  2,
      *                  3
      *              ]
      *          ],
-     *          "b": [
+     *          "user2": [
      *              [
      *                  4,
      *                  5,
@@ -43,22 +43,29 @@ class GameController extends Controller
      *          ]
      *      },
      *      "user_id": [
-     *          "a",
-     *          "b"
+     *          "user1",
+     *          "user2"
      *      ]
      * }
      * 
      * @response status=400 scenario="Bad Request" {
-     *     "message": "message": "This user is not in room."
-     * }
-     * @response status=400 scenario="Bad Request" {
-     *     "message": "This room_id is not fount."
+     *     "message": "This user is not in room."
      * }
      * @response status=404 scenario="Not Found" {
      *     "message": "This room_id not exits."
      * }
+     * 
+     * @response status=422 scenario="Unprocessable Content" {
+     *      "message": "The given data was invalid.",
+     *      "errors": {
+     *          "number": [
+     *              "The number must be an integer."
+     *          ]
+     *      }
+     * }
+     * 
      */
-    public function store(Request $request, BingoService $bingo)
+    public function store(GameRequest $request)
     {
         $room = session()->get("room.{$request->room_id}");
         $bingoArrs = session()->get("room.{$request->room_id}.users.{$request->nickname}", []);
@@ -80,20 +87,20 @@ class GameController extends Controller
     }
 
     /**
-     * Choose a numeric to zero.
+     * The selected number becomes zero.
      *
-     * @bodyParam room_id string required Need room_id to show the room information. emxample: "room1"
-     * @bodyParam nickname string required the text of the nickname. emxample: "Jacky"
-     * @bodyParam number integer required the number of the bingo. emxample: 3
+     * @bodyParam room_id string required Need room_id to show the room information. Example: "room1"
+     * @bodyParam nickname string required The text of the nickname. Example: "Jacky"
+     * @bodyParam number integer required The number of the bingo. Example: 3
      * 
      * @response 200 {
      *     "win_line": 1,
      *     "size": 3,
      *     "user_order": 1,
-     *     "room_id": "d",
+     *     "room_id": "user1",
      *     "user_number": 2,
      *     "users": {
-     *         "a": [
+     *         "user1": [
      *             [
      *                 0,
      *                 0,
@@ -110,7 +117,7 @@ class GameController extends Controller
      *                 13
      *             ]
      *         ],
-     *         "b": [
+     *         "user2": [
      *             [
      *                 4,
      *                 5,
@@ -129,8 +136,8 @@ class GameController extends Controller
      *         ]
      *     },
      *     "user_id": [
-     *         "a",
-     *         "b"
+     *         "user1",
+     *         "user2"
      *     ]
      * }
      * @response 200 {
@@ -138,16 +145,24 @@ class GameController extends Controller
      * }
      * 
      * @response status=400 scenario="Bad Request" {
-     *     "message": "message": "This user is not in room."
+     *     "message": "This user is not in room."
      * }
      * @response status=400 scenario="Bad Request" {
-     *     "message": "message": "Please wait for other user."
+     *     "message": "Please wait for other user."
      * }
      * @response status=404 scenario="Not Found" {
      *     "message": "This room_id not exits."
      * }
+     * @response status=422 scenario="Unprocessable Content" {
+     *      "message": "The given data was invalid.",
+     *      "errors": {
+     *          "number": [
+     *              "The number must be an integer."
+     *          ]
+     *      }
+     * }
      */
-    public function chooseNumber(Request $request, BingoService $bingo)
+    public function chooseNumber(GameRequest $request, BingoService $bingo)
     {
         $room = $bingo->getRoom();
         if (($room['user_order'] != array_search($request->nickname, $room['user_id']))) {

@@ -69,6 +69,38 @@
                                             
                                                 </ul>
                     
+                    <ul id="tocify-header-2" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="game">
+                    <a href="#game">Game</a>
+                </li>
+                                    <ul id="tocify-subheader-game" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="game-GETapi-room-game">
+                        <a href="#game-GETapi-room-game">The selected number becomes zero.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="game-POSTapi-room-game">
+                        <a href="#game-POSTapi-room-game">Store numeric values to fill bingoArr</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-3" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="room">
+                    <a href="#room">Room</a>
+                </li>
+                                    <ul id="tocify-subheader-room" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="room-POSTapi-room">
+                        <a href="#room-POSTapi-room">create a new room.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="room-GETapi-room">
+                        <a href="#room-GETapi-room">Show a room.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="room-DELETEapi-room">
+                        <a href="#room-DELETEapi-room">Delete a room.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="room-PUTapi-room">
+                        <a href="#room-PUTapi-room">User can join a room</a>
+                    </li>
+                                                    </ul>
+                            </ul>
         
                         
             </div>
@@ -98,7 +130,999 @@ You can switch the language used with the tabs at the top right (or from the nav
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>This API is not authenticated.</p>
 
-        
+        <h1 id="game">Game</h1>
+
+    
+
+            <h2 id="game-GETapi-room-game">The selected number becomes zero.</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-room-game">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/room/game" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"room_id\": \"\\\"room1\\\"\",
+    \"nickname\": \"\\\"Jacky\\\"\",
+    \"number\": 3
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/room/game"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "room_id": "\"room1\"",
+    "nickname": "\"Jacky\"",
+    "number": 3
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-room-game">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;win_line&quot;: 1,
+    &quot;size&quot;: 3,
+    &quot;user_order&quot;: 1,
+    &quot;room_id&quot;: &quot;user1&quot;,
+    &quot;user_number&quot;: 2,
+    &quot;users&quot;: {
+        &quot;user1&quot;: [
+            [
+                0,
+                0,
+                3
+            ],
+            [
+                6,
+                7,
+                8
+            ],
+            [
+                1,
+                12,
+                13
+            ]
+        ],
+        &quot;user2&quot;: [
+            [
+                4,
+                5,
+                6
+            ],
+            [
+                13,
+                1,
+                0
+            ],
+            [
+                3,
+                7,
+                8
+            ]
+        ]
+    },
+    &quot;user_id&quot;: [
+        &quot;user1&quot;,
+        &quot;user2&quot;
+    ]
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot; =&gt; &quot;Game Over. User:a Is Win.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;This user is not in room.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Please wait for other user.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;This room_id not exits.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, Unprocessable Content):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;number&quot;: [
+            &quot;The number must be an integer.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-room-game" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-room-game"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-room-game"></code></pre>
+</span>
+<span id="execution-error-GETapi-room-game" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-room-game"></code></pre>
+</span>
+<form id="form-GETapi-room-game" data-method="GET"
+      data-path="api/room/game"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-room-game', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-room-game"
+                    onclick="tryItOut('GETapi-room-game');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-room-game"
+                    onclick="cancelTryOut('GETapi-room-game');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-room-game" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/room/game</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>room_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="room_id"
+               data-endpoint="GETapi-room-game"
+               value=""room1""
+               data-component="body" hidden>
+    <br>
+<p>Need room_id to show the room information.</p>
+        </p>
+                <p>
+            <b><code>nickname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="nickname"
+               data-endpoint="GETapi-room-game"
+               value=""Jacky""
+               data-component="body" hidden>
+    <br>
+<p>The text of the nickname.</p>
+        </p>
+                <p>
+            <b><code>number</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="number"
+               data-endpoint="GETapi-room-game"
+               value="3"
+               data-component="body" hidden>
+    <br>
+<p>The number of the bingo.</p>
+        </p>
+        </form>
+
+            <h2 id="game-POSTapi-room-game">Store numeric values to fill bingoArr</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-room-game">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/api/room/game" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"room_id\": \"\\\"room1\\\"\",
+    \"nickname\": \"\\\"Jacky\\\"\",
+    \"number\": 3
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/room/game"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "room_id": "\"room1\"",
+    "nickname": "\"Jacky\"",
+    "number": 3
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-room-game">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;win_line&quot;: 1,
+    &quot;size&quot;: 3,
+    &quot;user_order&quot;: 0,
+    &quot;room_id&quot;: &quot;user1&quot;,
+    &quot;user_number&quot;: 2,
+    &quot;users&quot;: {
+        &quot;user1&quot;: [
+            [
+                1,
+                2,
+                3
+            ]
+        ],
+        &quot;user2&quot;: [
+            [
+                4,
+                5,
+                6
+            ]
+        ]
+    },
+    &quot;user_id&quot;: [
+        &quot;user1&quot;,
+        &quot;user2&quot;
+    ]
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;This user is not in room.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;This room_id not exits.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, Unprocessable Content):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;number&quot;: [
+            &quot;The number must be an integer.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-room-game" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-room-game"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-room-game"></code></pre>
+</span>
+<span id="execution-error-POSTapi-room-game" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-room-game"></code></pre>
+</span>
+<form id="form-POSTapi-room-game" data-method="POST"
+      data-path="api/room/game"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-room-game', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-room-game"
+                    onclick="tryItOut('POSTapi-room-game');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-room-game"
+                    onclick="cancelTryOut('POSTapi-room-game');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-room-game" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/room/game</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>room_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="room_id"
+               data-endpoint="POSTapi-room-game"
+               value=""room1""
+               data-component="body" hidden>
+    <br>
+<p>Need room_id to show the room information.</p>
+        </p>
+                <p>
+            <b><code>nickname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="nickname"
+               data-endpoint="POSTapi-room-game"
+               value=""Jacky""
+               data-component="body" hidden>
+    <br>
+<p>The text of the nickname.</p>
+        </p>
+                <p>
+            <b><code>number</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="number"
+               data-endpoint="POSTapi-room-game"
+               value="3"
+               data-component="body" hidden>
+    <br>
+<p>The number of the bingo.</p>
+        </p>
+        </form>
+
+        <h1 id="room">Room</h1>
+
+    
+
+            <h2 id="room-POSTapi-room">create a new room.</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-room">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/api/room" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"room_id\": \"\\\"room1\\\"\",
+    \"nickname\": \"\\\"Jacky\\\"\",
+    \"win_line\": 2,
+    \"size\": 3,
+    \"user_number\": 3
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/room"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "room_id": "\"room1\"",
+    "nickname": "\"Jacky\"",
+    "win_line": 2,
+    "size": 3,
+    "user_number": 3
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-room">
+            <blockquote>
+            <p>Example response (201):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;win_line&quot;: 1,
+    &quot;size&quot;: 3,
+    &quot;user_order&quot;: 0,
+    &quot;room_id&quot;: &quot;room1&quot;,
+    &quot;user_number&quot;: 2,
+    &quot;users&quot;: {
+        &quot;user1&quot;: []
+    },
+    &quot;user_id&quot;: [
+        &quot;user1&quot;
+    ]
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;The room_id has exists.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, Unprocessable Content):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;size&quot;: [
+            &quot;The size must not be greater than 10.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-room" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-room"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-room"></code></pre>
+</span>
+<span id="execution-error-POSTapi-room" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-room"></code></pre>
+</span>
+<form id="form-POSTapi-room" data-method="POST"
+      data-path="api/room"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-room', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-room"
+                    onclick="tryItOut('POSTapi-room');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-room"
+                    onclick="cancelTryOut('POSTapi-room');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-room" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/room</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>room_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="room_id"
+               data-endpoint="POSTapi-room"
+               value=""room1""
+               data-component="body" hidden>
+    <br>
+<p>The text of the room_id.</p>
+        </p>
+                <p>
+            <b><code>nickname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="nickname"
+               data-endpoint="POSTapi-room"
+               value=""Jacky""
+               data-component="body" hidden>
+    <br>
+<p>The text of the nickname.</p>
+        </p>
+                <p>
+            <b><code>win_line</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="win_line"
+               data-endpoint="POSTapi-room"
+               value="2"
+               data-component="body" hidden>
+    <br>
+<p>Game over when the number of connections is equal to win_line.</p>
+        </p>
+                <p>
+            <b><code>size</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="size"
+               data-endpoint="POSTapi-room"
+               value="3"
+               data-component="body" hidden>
+    <br>
+<p>The bingo size.</p>
+        </p>
+                <p>
+            <b><code>user_number</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="user_number"
+               data-endpoint="POSTapi-room"
+               value="3"
+               data-component="body" hidden>
+    <br>
+<p>The number of users in a room.</p>
+        </p>
+        </form>
+
+            <h2 id="room-GETapi-room">Show a room.</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-room">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/room" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"room_id\": \"\\\"room1\\\"\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/room"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "room_id": "\"room1\""
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-room">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;win_line&quot;: 1,
+    &quot;size&quot;: 3,
+    &quot;user_order&quot;: 0,
+    &quot;room_id&quot;: &quot;room&quot;,
+    &quot;user_number&quot;: 2,
+    &quot;users&quot;: {
+        &quot;user1&quot;: []
+    },
+    &quot;user_id&quot;: [
+        &quot;user1&quot;
+    ]
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;This room_id not exits.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-room" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-room"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-room"></code></pre>
+</span>
+<span id="execution-error-GETapi-room" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-room"></code></pre>
+</span>
+<form id="form-GETapi-room" data-method="GET"
+      data-path="api/room"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-room', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-room"
+                    onclick="tryItOut('GETapi-room');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-room"
+                    onclick="cancelTryOut('GETapi-room');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-room" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/room</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>room_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="room_id"
+               data-endpoint="GETapi-room"
+               value=""room1""
+               data-component="body" hidden>
+    <br>
+<p>Need room_id to show the room information.</p>
+        </p>
+        </form>
+
+            <h2 id="room-DELETEapi-room">Delete a room.</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-room">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://localhost/api/room" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"room_id\": \"\\\"room1\\\"\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/room"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "room_id": "\"room1\""
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-room">
+            <blockquote>
+            <p>Example response (204):</p>
+        </blockquote>
+                <pre>
+<code>[Empty response]</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;This room_id is not fount.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEapi-room" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-room"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-room"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-room" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-room"></code></pre>
+</span>
+<form id="form-DELETEapi-room" data-method="DELETE"
+      data-path="api/room"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-room', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-room"
+                    onclick="tryItOut('DELETEapi-room');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-room"
+                    onclick="cancelTryOut('DELETEapi-room');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-room" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/room</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>room_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="room_id"
+               data-endpoint="DELETEapi-room"
+               value=""room1""
+               data-component="body" hidden>
+    <br>
+<p>Need room_id to delete the room information.</p>
+        </p>
+        </form>
+
+            <h2 id="room-PUTapi-room">User can join a room</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-PUTapi-room">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://localhost/api/room" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"room_id\": \"\\\"room1\\\"\",
+    \"nickname\": \"\\\"Jacky\\\"\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/room"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "room_id": "\"room1\"",
+    "nickname": "\"Jacky\""
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-room">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Please Choose Another Nickname.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;The room is full. Please choose another room.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;This room_id not exits.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTapi-room" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-room"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-room"></code></pre>
+</span>
+<span id="execution-error-PUTapi-room" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-room"></code></pre>
+</span>
+<form id="form-PUTapi-room" data-method="PUT"
+      data-path="api/room"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-room', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-room"
+                    onclick="tryItOut('PUTapi-room');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-room"
+                    onclick="cancelTryOut('PUTapi-room');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-room" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/room</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>room_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="room_id"
+               data-endpoint="PUTapi-room"
+               value=""room1""
+               data-component="body" hidden>
+    <br>
+<p>The text of the room_id.</p>
+        </p>
+                <p>
+            <b><code>nickname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="nickname"
+               data-endpoint="PUTapi-room"
+               value=""Jacky""
+               data-component="body" hidden>
+    <br>
+<p>The text of the nickname.</p>
+        </p>
+        </form>
+
+    
+
         
     </div>
     <div class="dark-box">

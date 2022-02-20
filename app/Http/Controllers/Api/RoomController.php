@@ -15,23 +15,23 @@ class RoomController extends Controller
     /**
      * create a new room.
      
-     * @bodyParam room_id string required the text of the room_id. emxample: "room1"
-     * @bodyParam nickname string required the text of the nickname. emxample: "Jacky"
-     * @bodyParam size integer required the bingo size. emxample: 3
-     * @bodyParam win_line integer required Game over when the number of connections is equal to win_line. emxample: 2
-     * @bodyParam user_number integer required the number of user in a room. emxample: 3
+     * @bodyParam room_id string required The text of the room_id. Example: "room1"
+     * @bodyParam nickname string required The text of the nickname. Example: "Jacky"
+     * @bodyParam size integer required The bingo size. Example: 3
+     * @bodyParam win_line integer required Game over when the number of connections is equal to win_line. Example: 2
+     * @bodyParam user_number integer required The number of users in a room. Example: 3
      * 
      * @response 201 {
      *     "win_line": 1,
      *     "size": 3,
      *     "user_order": 0,
-     *     "room_id": "d",
+     *     "room_id": "room1",
      *     "user_number": 2,
      *     "users": {
-     *         "a": []
+     *         "user1": []
      *     },
      *     "user_id": [
-     *         "a"
+     *         "user1"
      *     ]
      * }
      * 
@@ -74,8 +74,8 @@ class RoomController extends Controller
     /**
      * User can join a room
      *
-     * @bodyParam room_id string required the text of the room_id. emxample: "room1"
-     * @bodyParam nickname string required the text of the nickname. emxample: "Jacky"
+     * @bodyParam room_id string required The text of the room_id. Example: "room1"
+     * @bodyParam nickname string required The text of the nickname. Example: "Jacky"
      * 
      * @response 200 {
      *     
@@ -99,25 +99,24 @@ class RoomController extends Controller
         $users +=  array($request->nickname => []);
         session()->put("room.{$request->room_id}.users", $users);
 
-
         return response()->json(session()->get("room.{$request->room_id}.users"), response::HTTP_OK);
     }
     /**
      * Show a room.
      *
-     * @bodyParam room_id string required Need room_id to show the room information. emxample: "room1"
+     * @bodyParam room_id string required Need room_id to show the room information. Example: "room1"
      * 
      * @response 200 {
      *     "win_line": 1,
      *     "size": 3,
      *     "user_order": 0,
-     *     "room_id": "d",
+     *     "room_id": "room",
      *     "user_number": 2,
      *     "users": {
-     *         "a": []
+     *         "user1": []
      *     },
      *     "user_id": [
-     *         "a"
+     *         "user1"
      *     ]
      * }
      * @response status=404 scenario="Not Found" {
@@ -138,7 +137,7 @@ class RoomController extends Controller
     /**
      * Delete a room.
      *
-     * @bodyParam room_id string required Need room_id to delete the room information. emxample: "room1"
+     * @bodyParam room_id string required Need room_id to delete the room information. Example: "room1"
      * 
      * @response 204 {
      *    

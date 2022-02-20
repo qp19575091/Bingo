@@ -6,5 +6,599 @@ info:
 servers:
   -
     url: 'http://localhost'
-paths: []
-tags: []
+paths:
+  /api/room/game:
+    get:
+      summary: 'The selected number becomes zero.'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n    \"message\" => \"Game Over. User:a Is Win.\"\n}"
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Please wait for other user.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Please wait for other user.'
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'This room_id not exits.'
+                properties:
+                  message:
+                    type: string
+                    example: 'This room_id not exits.'
+        422:
+          description: 'Unprocessable Content'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    number:
+                      - 'The number must be an integer.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    example:
+                      number:
+                        - 'The number must be an integer.'
+      tags:
+        - Game
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id:
+                  type: string
+                  description: 'Need room_id to show the room information.'
+                  example: '"room1"'
+                nickname:
+                  type: string
+                  description: 'The text of the nickname.'
+                  example: '"Jacky"'
+                number:
+                  type: integer
+                  description: 'The number of the bingo.'
+                  example: 3
+              required:
+                - room_id
+                - nickname
+                - number
+      security: []
+    post:
+      summary: 'Store numeric values to fill bingoArr'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  win_line: 1
+                  size: 3
+                  user_order: 0
+                  room_id: user1
+                  user_number: 2
+                  users:
+                    user1:
+                      -
+                        - 1
+                        - 2
+                        - 3
+                    user2:
+                      -
+                        - 4
+                        - 5
+                        - 6
+                  user_id:
+                    - user1
+                    - user2
+                properties:
+                  win_line:
+                    type: integer
+                    example: 1
+                  size:
+                    type: integer
+                    example: 3
+                  user_order:
+                    type: integer
+                    example: 0
+                  room_id:
+                    type: string
+                    example: user1
+                  user_number:
+                    type: integer
+                    example: 2
+                  users:
+                    type: object
+                    example:
+                      user1:
+                        -
+                          - 1
+                          - 2
+                          - 3
+                      user2:
+                        -
+                          - 4
+                          - 5
+                          - 6
+                  user_id:
+                    type: array
+                    example:
+                      - user1
+                      - user2
+                    items:
+                      type: string
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'This user is not in room.'
+                properties:
+                  message:
+                    type: string
+                    example: 'This user is not in room.'
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'This room_id not exits.'
+                properties:
+                  message:
+                    type: string
+                    example: 'This room_id not exits.'
+        422:
+          description: 'Unprocessable Content'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    number:
+                      - 'The number must be an integer.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    example:
+                      number:
+                        - 'The number must be an integer.'
+      tags:
+        - Game
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id:
+                  type: string
+                  description: 'Need room_id to show the room information.'
+                  example: '"room1"'
+                nickname:
+                  type: string
+                  description: 'The text of the nickname.'
+                  example: '"Jacky"'
+                number:
+                  type: integer
+                  description: 'The number of the bingo.'
+                  example: 3
+              required:
+                - room_id
+                - nickname
+                - number
+      security: []
+  /api/room:
+    post:
+      summary: 'create a new room.'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  win_line: 1
+                  size: 3
+                  user_order: 0
+                  room_id: room1
+                  user_number: 2
+                  users:
+                    user1: []
+                  user_id:
+                    - user1
+                properties:
+                  win_line:
+                    type: integer
+                    example: 1
+                  size:
+                    type: integer
+                    example: 3
+                  user_order:
+                    type: integer
+                    example: 0
+                  room_id:
+                    type: string
+                    example: room1
+                  user_number:
+                    type: integer
+                    example: 2
+                  users:
+                    type: object
+                    example:
+                      user1: []
+                  user_id:
+                    type: array
+                    example:
+                      - user1
+                    items:
+                      type: string
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The room_id has exists.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The room_id has exists.'
+        422:
+          description: 'Unprocessable Content'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    size:
+                      - 'The size must not be greater than 10.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    example:
+                      size:
+                        - 'The size must not be greater than 10.'
+      tags:
+        - Room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id:
+                  type: string
+                  description: 'The text of the room_id.'
+                  example: '"room1"'
+                nickname:
+                  type: string
+                  description: 'The text of the nickname.'
+                  example: '"Jacky"'
+                win_line:
+                  type: integer
+                  description: 'Game over when the number of connections is equal to win_line.'
+                  example: 2
+                size:
+                  type: integer
+                  description: 'The bingo size.'
+                  example: 3
+                user_number:
+                  type: integer
+                  description: 'The number of users in a room.'
+                  example: 3
+              required:
+                - room_id
+                - nickname
+                - win_line
+                - size
+                - user_number
+      security: []
+    get:
+      summary: 'Show a room.'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  win_line: 1
+                  size: 3
+                  user_order: 0
+                  room_id: room
+                  user_number: 2
+                  users:
+                    user1: []
+                  user_id:
+                    - user1
+                properties:
+                  win_line:
+                    type: integer
+                    example: 1
+                  size:
+                    type: integer
+                    example: 3
+                  user_order:
+                    type: integer
+                    example: 0
+                  room_id:
+                    type: string
+                    example: room
+                  user_number:
+                    type: integer
+                    example: 2
+                  users:
+                    type: object
+                    example:
+                      user1: []
+                  user_id:
+                    type: array
+                    example:
+                      - user1
+                    items:
+                      type: string
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'This room_id not exits.'
+                properties:
+                  message:
+                    type: string
+                    example: 'This room_id not exits.'
+      tags:
+        - Room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id:
+                  type: string
+                  description: 'Need room_id to show the room information.'
+                  example: '"room1"'
+              required:
+                - room_id
+      security: []
+    delete:
+      summary: 'Delete a room.'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        204:
+          description: ''
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'This room_id is not fount.'
+                properties:
+                  message:
+                    type: string
+                    example: 'This room_id is not fount.'
+      tags:
+        - Room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id:
+                  type: string
+                  description: 'Need room_id to delete the room information.'
+                  example: '"room1"'
+              required:
+                - room_id
+      security: []
+    put:
+      summary: 'User can join a room'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The room is full. Please choose another room.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The room is full. Please choose another room.'
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'This room_id not exits.'
+                properties:
+                  message:
+                    type: string
+                    example: 'This room_id not exits.'
+      tags:
+        - Room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id:
+                  type: string
+                  description: 'The text of the room_id.'
+                  example: '"room1"'
+                nickname:
+                  type: string
+                  description: 'The text of the nickname.'
+                  example: '"Jacky"'
+              required:
+                - room_id
+                - nickname
+      security: []
+tags:
+  -
+    name: Game
+    description: ''
+  -
+    name: Room
+    description: ''

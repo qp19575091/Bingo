@@ -1,0 +1,247 @@
+name: Room
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/room
+    metadata:
+      title: 'create a new room.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      room_id:
+        name: room_id
+        description: 'The text of the room_id.'
+        required: true
+        example: '"room1"'
+        type: string
+        custom: []
+      nickname:
+        name: nickname
+        description: 'The text of the nickname.'
+        required: true
+        example: '"Jacky"'
+        type: string
+        custom: []
+      win_line:
+        name: win_line
+        description: 'Game over when the number of connections is equal to win_line.'
+        required: true
+        example: 2
+        type: integer
+        custom: []
+      size:
+        name: size
+        description: 'The bingo size.'
+        required: true
+        example: 3
+        type: integer
+        custom: []
+      user_number:
+        name: user_number
+        description: 'The number of users in a room.'
+        required: true
+        example: 3
+        type: integer
+        custom: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+              "win_line": 1,
+              "size": 3,
+              "user_order": 0,
+              "room_id": "room1",
+              "user_number": 2,
+              "users": {
+                  "user1": []
+              },
+              "user_id": [
+                  "user1"
+              ]
+          }
+        headers: []
+        description: '201'
+      -
+        status: 400
+        content: |-
+          {
+               "message": "The room_id has exists."
+          }
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 422
+        content: |-
+          {
+               "message": "The given data was invalid.",
+               "errors": {
+                   "size": [
+                       "The size must not be greater than 10."
+                   ]
+               }
+          }
+        headers: []
+        description: '422, Unprocessable Content'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/room
+    metadata:
+      title: 'Show a room.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      room_id:
+        name: room_id
+        description: 'Need room_id to show the room information.'
+        required: true
+        example: '"room1"'
+        type: string
+        custom: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+              "win_line": 1,
+              "size": 3,
+              "user_order": 0,
+              "room_id": "room",
+              "user_number": 2,
+              "users": {
+                  "user1": []
+              },
+              "user_id": [
+                  "user1"
+              ]
+          }
+        headers: []
+        description: '200'
+      -
+        status: 404
+        content: |-
+          {
+              "message": "This room_id not exits."
+          }
+        headers: []
+        description: '404, Not Found'
+    responseFields: []
+  -
+    httpMethods:
+      - DELETE
+    uri: api/room
+    metadata:
+      title: 'Delete a room.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      room_id:
+        name: room_id
+        description: 'Need room_id to delete the room information.'
+        required: true
+        example: '"room1"'
+        type: string
+        custom: []
+    responses:
+      -
+        status: 204
+        content: |-
+          {
+
+          }
+        headers: []
+        description: '204'
+      -
+        status: 404
+        content: |-
+          {
+              "message": "This room_id is not fount."
+          }
+        headers: []
+        description: '404, Not Found'
+    responseFields: []
+  -
+    httpMethods:
+      - PUT
+    uri: api/room
+    metadata:
+      title: 'User can join a room'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      room_id:
+        name: room_id
+        description: 'The text of the room_id.'
+        required: true
+        example: '"room1"'
+        type: string
+        custom: []
+      nickname:
+        name: nickname
+        description: 'The text of the nickname.'
+        required: true
+        example: '"Jacky"'
+        type: string
+        custom: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+
+          }
+        headers: []
+        description: '200'
+      -
+        status: 400
+        content: |-
+          {
+               "message": "Please Choose Another Nickname."
+          }
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: |-
+          {
+               "message": "The room is full. Please choose another room."
+          }
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: |-
+          {
+               "message": "This room_id not exits."
+          }
+        headers: []
+        description: '404, Not Found'
+    responseFields: []
