@@ -20,6 +20,6 @@ class CheckRoomExist
         if (session()->has("room.{$request->room_id}")) {
             return $next($request);
         }
-        abort(Response::HTTP_FORBIDDEN, "This room_id not exits");
+        abort(Response::HTTP_NOT_FOUND, "This room_id not exits.");
     }
 }

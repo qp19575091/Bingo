@@ -17,7 +17,7 @@ class BingoService
 
     public function getBingoArr()
     {
-        return session()->get("room")[$this->room_id]['users'][$this->nickname];
+        return session()->get("room.{$this->room_id}.users", []);
     }
 
     public function getUserNumber()
@@ -35,9 +35,9 @@ class BingoService
         return session()->get("room.{$this->room_id}");
     }
 
-    public function isBingo()
+    public function isBingo($nickname)
     {
-        $line = $this->getLine();
+        $line = $this->getLine($nickname);
         $room = $this->getRoom();
 
         if ($line === $room['win_line']) {
@@ -56,9 +56,9 @@ class BingoService
         }
     }
 
-    public function getLine()
+    public function getLine($nickname)
     {
-        $bingoArrs = $this->getBingoArr($this->room_id, $this->nickname);
+        $bingoArrs = $this->getBingoArr()[$nickname];
 
         $count = 0;
         $line = 0;

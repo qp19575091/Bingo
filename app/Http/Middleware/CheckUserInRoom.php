@@ -21,6 +21,6 @@ class CheckUserInRoom
         if (in_array($request->nickname, $room['user_id'])) {
             return $next($request);
         }
-        abort(Response::HTTP_FORBIDDEN, "This user is not in room");
+        abort(Response::HTTP_BAD_REQUEST, "This user is not in room.");
     }
 }

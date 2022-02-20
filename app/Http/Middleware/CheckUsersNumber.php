@@ -17,11 +17,13 @@ class CheckUsersNumber
      */
     public function handle(Request $request, Closure $next)
     {
+        $user_number = session()->get("room.{$request->room_id}.user_number");
+        
         if (array_key_exists($request->nickname, session()->get("room.{$request->room_id}.users"))) {
-            abort(response::HTTP_ACCEPTED, "Please Choose Another Nickname");
+            abort(response::HTTP_BAD_REQUEST, "Please Choose Another Nickname.");
         }
-        if (count(session()->get("room.{$request->room_id}.users")) >= 2) { 
-            abort(response::HTTP_ACCEPTED, "The room is full. Please choose another room");
+        if (count(session()->get("room.{$request->room_id}.users")) >= $user_number) { 
+            abort(response::HTTP_BAD_REQUEST, "The room is full. Please choose another room.");
         }
         return $next($request);
     }

@@ -7,7 +7,9 @@ use App\Http\Requests\RoomRequest;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
+/**
+ * @group Room
+ */
 class RoomController extends Controller
 {
     /**
@@ -15,13 +17,34 @@ class RoomController extends Controller
      
      * @bodyParam room_id string required the text of the room_id. emxample: "room1"
      * @bodyParam nickname string required the text of the nickname. emxample: "Jacky"
+     * @bodyParam size integer required the bingo size. emxample: 3
+     * @bodyParam win_line integer required Game over when the number of connections is equal to win_line. emxample: 2
+     * @bodyParam user_number integer required the number of user in a room. emxample: 3
      * 
      * @response 201 {
-     *     
+     *     "win_line": 1,
+     *     "size": 3,
+     *     "user_order": 0,
+     *     "room_id": "d",
+     *     "user_number": 2,
+     *     "users": {
+     *         "a": []
+     *     },
+     *     "user_id": [
+     *         "a"
+     *     ]
      * }
      * 
-     * @response status=202 scenario="Accepted" {
-     *     "message": "The room is full. Please choose another room"
+     * @response status=400 scenario="Bad Request" {
+     *      "message": "The room_id has exists."
+     * }
+     * @response status=422 scenario="Unprocessable Content" {
+     *      "message": "The given data was invalid.",
+     *      "errors": {
+     *          "size": [
+     *              "The size must not be greater than 10."
+     *          ]
+     *      }
      * }
      */
     public function store(RoomRequest $request)
@@ -31,15 +54,16 @@ class RoomController extends Controller
             "size" => $request->size,
             "user_order" => 0,
             "room_id" => $request->room_id,
-
+            "user_number" => $request->user_number,
             "users" => [
                 $request->nickname => []
             ]
         ];
 
         if (session()->has("room.{$request->room_id}")) {
-            return "The room_id has exists";
+            return response()->json(['message' => "The room_id has exists"], Response::HTTP_BAD_REQUEST);
         }
+
         session()->put("room.{$request->room_id}", $room);
         session()->push("room.{$request->room_id}.user_id", $request->nickname);
 
@@ -53,13 +77,20 @@ class RoomController extends Controller
      * @bodyParam room_id string required the text of the room_id. emxample: "room1"
      * @bodyParam nickname string required the text of the nickname. emxample: "Jacky"
      * 
-     * @response 201 {
+     * @response 200 {
      *     
      * }
      * 
-     * @response status=202 scenario="Accepted" {
-     *     "message": "The room is full. Please choose another room"
+     * @response status=400 scenario="Bad Request" {
+     *      "message": "Please Choose Another Nickname."
      * }
+     * @response status=400 scenario="Bad Request" {
+     *      "message": "The room is full. Please choose another room."
+     * }
+     * @response status=404 scenario="Not Found" {
+     *      "message": "This room_id not exits."
+     * }
+     * 
      */
     public function join(Request $request)
     {
@@ -69,33 +100,33 @@ class RoomController extends Controller
         session()->put("room.{$request->room_id}.users", $users);
 
 
-        return session()->get("room.{$request->room_id}.users");
+        return response()->json(session()->get("room.{$request->room_id}.users"), response::HTTP_OK);
     }
     /**
-     * show a room.
+     * Show a room.
      *
      * @bodyParam room_id string required Need room_id to show the room information. emxample: "room1"
      * 
      * @response 200 {
+     *     "win_line": 1,
+     *     "size": 3,
      *     "user_order": 0,
-     *     "room_id": 2,
-     *     "users": [
-     *         "Jacky",
-     *         "Ben"
+     *     "room_id": "d",
+     *     "user_number": 2,
+     *     "users": {
+     *         "a": []
+     *     },
+     *     "user_id": [
+     *         "a"
      *     ]
      * }
-     * 
      * @response status=404 scenario="Not Found" {
-     *     "message": "This room_id is not fount."
+     *     "message": "This room_id not exits."
      * }
      */
     public function show(Request $request)
     {
-        // return session()->put("room.{$request->room_id}.user_order", 0);
         $room = session()->get("room.{$request->room_id}");
-
-        // return $room['users']['a'];
-        // return array_keys($room['users'],"a");
 
         if (is_null($room)) {
             abort(Response::HTTP_NOT_FOUND, "This room_id is not fount.");

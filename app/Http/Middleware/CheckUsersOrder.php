@@ -21,6 +21,6 @@ class CheckUsersOrder
         if (($room['user_order'] == array_search($request->nickname, $room['user_id']))) {
             return $next($request);
         }
-        abort(Response::HTTP_FORBIDDEN, "Please wait for other.");
+        abort(Response::HTTP_BAD_REQUEST, "Please wait for other.");
     }
 }
